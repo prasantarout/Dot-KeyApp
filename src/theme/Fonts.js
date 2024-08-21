@@ -1,0 +1,31 @@
+export const Fonts = {
+    //---------------------
+    RobotoBlack: 'Roboto-Black',
+    RobotoBlackItalic: 'Roboto-BlackItalic',
+    RobotoBold: 'Roboto-Bold',
+    RobotoBoldItalic: 'Roboto-BoldItalic',
+    RobotoItalic: 'Roboto-Italic',
+    RobotoLight: 'Roboto-Light',
+    RobotoLightItalic: 'Roboto-LightItalic',
+    RobotoMedium: 'Roboto-Medium',
+    RobotoMediumItalic: 'Roboto-MediumItalic',
+    RobotoRegular: 'Roboto-Regular',
+    RobotoThin: 'Roboto-Thin',
+    RobotoThinItalic: 'Roboto-ThinItalic',
+    //---------------------
+    AssistantExtraBold: 'Assistant-ExtraBold',
+    AssistantBold: 'Assistant-Bold',
+    AssistantSemiBold: 'Assistant-SemiBold',
+    AssistantMedium: 'Assistant-Medium',
+    AssistantRegular: 'Assistant-Regular',
+    AssistantLight: 'Assistant-Light',
+    AssistantExtraLight: 'Assistant-ExtraLight',
+    //---------------------
+    MadeTommyBlack: 'MADETommySoft-Black',
+    MadeTommyBold: 'MADETommySoft-Bold',
+    MadeTommyExtraBold: 'MADETommySoft-ExtraBold',
+    MadeTommyLight: 'MADETommySoft-Light',
+    MadeTommyMedium: 'MADETommySoft-Medium',
+    MadeTommyThin: 'MADETommySoft-Thin',
+    MadeTommy: 'MADETommySoft',
+  };
