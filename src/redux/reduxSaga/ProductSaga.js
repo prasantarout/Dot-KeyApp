@@ -2,7 +2,12 @@ import {call, put, takeLatest} from 'redux-saga/effects';
 
 import {getApi} from '../../utils/helpers/ApiRequest';
 import showErrorAlert from '../../utils/helpers/Toast';
-import { getProductListFailure, getProductListSuccess } from '../reducer/ProductReducer';
+import {
+  getProductByCategoryFailure,
+  getProductByCategorySuccess,
+  getProductListFailure,
+  getProductListSuccess,
+} from '../reducer/ProductReducer';
 
 export function* getProductSaga(action) {
   let header = {
@@ -23,9 +28,35 @@ export function* getProductSaga(action) {
   }
 }
 
+export function* getProductByCategorySaga(action) {
+  let header = {
+    Accept: 'application/json',
+    contenttype: 'application/json',
+  };
+  try {
+    let response = yield call(getApi, `category/${action.payload}`, header);
+    // console.log(response,">>>>>>>?>>>>products")
+    if (response?.status == 200) {
+      yield put(getProductByCategorySuccess(response?.data));
+    } else {
+      yield put(getProductByCategoryFailure(response?.data));
+      showErrorAlert(response?.data?.message);
+    }
+  } catch (error) {
+    yield put(getProductByCategoryFailure(error));
+    showErrorAlert(error?.response?.data?.message);
+  }
+}
+
 const watchFunction = [
   (function* () {
     yield takeLatest('Product/getProductListRequest', getProductSaga);
+  })(),
+  (function* () {
+    yield takeLatest(
+      'Product/getProductByCategoryRequest',
+      getProductByCategorySaga,
+    );
   })(),
 ];
 

@@ -36,6 +36,8 @@ const CategorySlice = createSlice({
       state.error = action.error;
       state.status = action.type;
     },
+
+    
   },
 });
 export const {

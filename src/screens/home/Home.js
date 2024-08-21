@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import {Icons} from '../../theme/Icon';
 import ProductCard from '../../components/common/ProductCard';
@@ -18,6 +19,7 @@ import {getCategoriesListRequest} from '../../redux/reducer/CategoryReducer';
 import connectionrequest from '../../utils/helpers/NetInfo';
 import {useDispatch, useSelector} from 'react-redux';
 import CategoryItem from '../../components/common/CategoryItem';
+import {getProductByCategoryRequest} from '../../redux/reducer/ProductReducer';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -25,6 +27,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const categories =
     useSelector(state => state.CategoryReducer?.categoriesListRes) || [];
+  const ProductReducer = useSelector(state => state.ProductReducer);
+  console.log(ProductReducer?.getProductByCategoryRes, '>>>>>>>????>>>>>res');
 
   useEffect(() => {
     connectionrequest()
@@ -40,6 +44,18 @@ const Home = () => {
     setSelectedCategory(category);
   };
 
+  useEffect(() => {
+    if (categories?.length > 0) {
+      setSelectedCategory(categories[0]);
+    }
+  }, [categories]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      dispatch(getProductByCategoryRequest(selectedCategory.slug));
+    }
+  }, [selectedCategory]);
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -51,31 +67,44 @@ const Home = () => {
         icons={Icons.userProfile}
       />
       {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <TextInputBoxSearch />
-      </View>
-      {/* Categories List */}
-      <FlatList
-        data={categories}
-        renderItem={({item}) => (
-          <CategoryItem
-            category={item}
-            onPress={handleCategoryPress}
-            isSelected={item.slug === selectedCategory?.slug}
-          />
-        )}
-        keyExtractor={item => item.slug}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-      {/* Product Grid */}
-      <FlatList
-        data={products}
-        renderItem={product => <ProductCard product={product} />}
-        keyExtractor={item => item.id.toString()}
-        numColumns={2}
-        contentContainerStyle={styles.productList}
-      />
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.searchContainer}>
+          <TextInputBoxSearch />
+        </View>
+        {/* Categories List */}
+        <FlatList
+          data={categories}
+          renderItem={({item}) => (
+            <CategoryItem
+              category={item}
+              onPress={handleCategoryPress}
+              isSelected={item.slug === selectedCategory?.slug}
+            />
+          )}
+          keyExtractor={item => item.slug}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+        {/* Product Grid */}
+
+        <FlatList
+          data={ProductReducer?.getProductByCategoryRes?.products}
+          renderItem={product => (
+            <ProductCard
+              product={{
+                // ...product.item,
+                price: product.item.price,
+                image: product.item.thumbnail,
+                title:product.item.title,
+              }}
+            
+            />
+          )}
+          keyExtractor={item => item.id.toString()}
+          numColumns={2}
+          contentContainerStyle={styles.productList}
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -117,7 +146,7 @@ const styles = StyleSheet.create({
     color: COLORS.textColor,
   },
   productList: {
-    marginTop: 10,
+    marginTop: normalize(10),
   },
   card: {
     flex: 1,
