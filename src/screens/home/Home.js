@@ -67,7 +67,9 @@ const Home = () => {
         icons={Icons.userProfile}
       />
       {/* Search Bar */}
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} 
+      showsVerticalScrollIndicator={false}
+      >
         <View style={styles.searchContainer}>
           <TextInputBoxSearch />
         </View>
@@ -96,6 +98,7 @@ const Home = () => {
                 price: product.item.price,
                 image: product.item.thumbnail,
                 title:product.item.title,
+                description: product.item.description,
               }}
             
             />
