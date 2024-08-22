@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {Icons} from '../../theme/Icon';
 import ProductCard from '../../components/common/ProductCard';
@@ -23,10 +24,15 @@ import {getProductByCategoryRequest} from '../../redux/reducer/ProductReducer';
 import {toggleFavorite} from '../../redux/actions/favoriteActions';
 import showErrorAlert from '../../utils/helpers/Toast';
 import AppStatusBar from '../../components/global/StatusBar';
+import Loader from '../../utils/helpers/Loader';
+import {addToCart} from '../../redux/actions/cartActions';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
   const dispatch = useDispatch();
   const categories =
     useSelector(state => state.CategoryReducer?.categoriesListRes) || [];
@@ -36,6 +42,7 @@ const Home = () => {
       state => state.ProductReducer?.getProductByCategoryRes?.products,
     ) || [];
   const favorites = useSelector(state => state.favoriteReducer.favorites);
+  const cartItems = useSelector(state => state.cartReducer.cartItems);
   // console.log(favorites,">>>>>>??>>>>sss")
 
   useEffect(() => {
@@ -55,12 +62,20 @@ const Home = () => {
   useEffect(() => {
     if (categories?.length > 0) {
       setSelectedCategory(categories[0]);
+      setLoadingCategories(false);
     }
   }, [categories]);
 
   useEffect(() => {
     if (selectedCategory) {
-      dispatch(getProductByCategoryRequest(selectedCategory.slug));
+      setLoadingProducts(true);
+      connectionrequest()
+        .then(() => {
+          dispatch(getProductByCategoryRequest(selectedCategory.slug));
+        })
+        .finally(() => {
+          setLoadingProducts(false);
+        });
     }
   }, [selectedCategory]);
 
@@ -75,6 +90,18 @@ const Home = () => {
     }
   };
 
+  const handleAddToCart = product => {
+    const isProductInCart = cartItems.some(item => item.id === product.id);
+
+    if (isProductInCart) {
+      showErrorAlert(`${product.title} is already in your cart.`);
+    } else {
+      dispatch(addToCart(product));
+      showErrorAlert(`${product.title} has been added to your cart.`);
+    }
+  };
+
+
   const renderProductCard = ({item: product}) => {
     const isFavorite = favorites.some(favItem => favItem.id === product.id);
     return (
@@ -82,13 +109,23 @@ const Home = () => {
         product={product}
         isFavorite={isFavorite}
         onToggleFavorite={() => handleToggleFavorite(product)}
+        handleAddToCart={() => handleAddToCart(product)}
       />
     );
   };
 
+  if (loadingCategories || loadingProducts) {
+    // Show loader while data is being fetched
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <AppStatusBar />
+      {/* <AppStatusBar /> */}
       {/* Header */}
       <CustomHeader
         title="Logo"
@@ -130,6 +167,7 @@ const Home = () => {
           keyExtractor={item => item.id.toString()}
           numColumns={2}
           contentContainerStyle={styles.productList}
+          scrollEnabled={false}
         />
       </ScrollView>
     </View>
@@ -174,6 +212,7 @@ const styles = StyleSheet.create({
   },
   productList: {
     marginTop: normalize(10),
+    paddingBottom: normalize(50),
   },
   card: {
     flex: 1,
@@ -227,5 +266,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f1f1f1',
   },
 });

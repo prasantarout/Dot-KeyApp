@@ -2,7 +2,7 @@ import {View, Text, Modal, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {Fonts} from '../../theme/Fonts';
 import {COLORS} from '../../theme/Colors';
-import normalize from '../utils/helpers/dimen';
+import normalize from '../../utils/helpers/normalize';
 
 export default function NoInternetModal({netInfo}) {
   return (

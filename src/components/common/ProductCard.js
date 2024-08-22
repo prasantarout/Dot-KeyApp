@@ -20,6 +20,7 @@ const ProductCard = ({
   index,
   isFavorite,
   onToggleFavorite,
+  handleAddToCart
 }) => {
   // console.log(product, '?????>>>product');
   return (
@@ -48,7 +49,7 @@ const ProductCard = ({
       </Text>
       <View style={styles.priceAndCartContainer}>
         <Text style={styles.productCardPriceText}>₹{product?.price}</Text>
-        <TouchableOpacity style={styles.cartIcon}>
+        <TouchableOpacity style={styles.cartIcon} onPress={handleAddToCart }>
           <Image source={Icons.Cart} style={styles.cartIconImage} />
         </TouchableOpacity>
       </View>

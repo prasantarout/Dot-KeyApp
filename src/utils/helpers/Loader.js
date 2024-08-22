@@ -7,17 +7,17 @@ import {
   View,
   Text,
 } from 'react-native';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 // import { Colors, Images } from '../../themes/Themes';
-import normalize from './dimen';
-import {Colors} from '../../themes/ImagePath';
+import normalize from './normalize';
+import { COLORS } from '../../theme/Colors';
 export default function Loader(props) {
   return props.visible ? (
     <View
       style={[
         {
           position: 'absolute',
-          backgroundColor: Colors.theme,
+          backgroundColor: COLORS.primary,
           zIndex: 999,
           top: 0,
           left: 0,
@@ -54,12 +54,12 @@ export default function Loader(props) {
   ) : null;
 }
 
-Loader.propTypes = {
-  visible: PropTypes.bool,
-  modal: PropTypes.bool,
-};
+// Loader.propTypes = {
+//   visible: PropTypes.bool,
+//   modal: PropTypes.bool,
+// };
 
-Loader.defaultProps = {
-  modal: false,
-  visible: false,
-};
+// Loader.defaultProps = {
+//   modal: false,
+//   visible: false,
+// };

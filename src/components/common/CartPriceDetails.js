@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import normalize from '../../utils/normalize';
-import {Colors, Fonts} from '../../themes/Themes';
+import normalize from '../../utils/helpers/normalize';
+import { COLORS } from '../../theme/Colors';
+import { Fonts } from '../../theme/Fonts';
 
 const CartPriceDetails = ({
   totalProduct,
@@ -31,7 +32,7 @@ const CartPriceDetails = ({
       <View style={styles.priceDetailsDataContainer}>
         <Text style={styles.priceDetailsDataLabelText}>Payable Amount</Text>
         <Text style={styles.priceDetailsDataValueText}>
-          USD{'      ' + payableAmount}
+          {'      ' + payableAmount}
         </Text>
       </View>
     </View>
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
   },
   priceDetailsLabelText: {
     fontSize: normalize(13),
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontFamily: Fonts.MadeTommyExtraBold,
   },
   priceDetailsDataContainer: {

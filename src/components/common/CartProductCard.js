@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Colors, Fonts, Icons} from '../../themes/Themes';
-import normalize from '../../utils/normalize';
+import normalize from '../../utils/helpers/normalize';
+import {COLORS} from '../../theme/Colors';
+import {Icons} from '../../theme/Icon';
+import {Fonts} from '../../theme/Fonts';
 
 const CartProductCard = ({
   productImageSize = 80,
@@ -15,14 +17,19 @@ const CartProductCard = ({
   showOrderId = false,
   onPressReview = () => {},
   showReview = false,
-  // count = 0,
-  // setCount = () => {},
   highlightPrice = false,
   showDelete = false,
   showCounter = false,
   containerStyle = {},
+  onDelete = () => {},
+  onIncrease,
+  onDecrease,
+  quantity,
 }) => {
   const [count, setCount] = useState(1);
+  const price = parseFloat(productPrice.replace('$', ''));
+  const totalPrice = (count * price).toFixed(2);
+
   return (
     <View style={[styles.productCardMainContainer, containerStyle]}>
       <View
@@ -62,39 +69,26 @@ const CartProductCard = ({
                 ? styles.productCardPriceTextHighlight
                 : styles.productCardPriceText
             }>
-            {productPrice}{' '}
-            {showActualPrice ? (
-              <Text style={styles.productCardActualPrice}>
-                {productActualPrice}
-              </Text>
-            ) : null}
+            ₹{totalPrice}
           </Text>
         ) : null}
 
         {showDelete ? (
-          <TouchableOpacity activeOpacity={0.5}>
+          <TouchableOpacity activeOpacity={0.5} onPress={onDelete} style={styles.deleteIcon}>
             <Image source={Icons.delete} style={styles.productCardDeleteIcon} />
-          </TouchableOpacity>
-        ) : null}
-
-        {showReview ? (
-          <TouchableOpacity onPress={onPressReview}>
-            <Text style={styles.productCardReviewText}>Review This Item</Text>
           </TouchableOpacity>
         ) : null}
       </View>
       {showCounter ? (
         <View style={styles.counterTextContainer}>
           <TouchableOpacity
-            onPress={() => {
-              count > 0 ? setCount(count - 1) : null;
-            }}
+            onPress={onDecrease}
             style={styles.counterTouchArea}>
             <Text style={styles.counterText}>-</Text>
           </TouchableOpacity>
-          <Text style={styles.counterText}>{count}</Text>
+          <Text style={styles.counterText}>{quantity}</Text>
           <TouchableOpacity
-            onPress={() => setCount(count + 1)}
+            onPress={onIncrease}
             style={styles.counterTouchArea}>
             <Text style={styles.counterText}>+</Text>
           </TouchableOpacity>
@@ -103,7 +97,6 @@ const CartProductCard = ({
     </View>
   );
 };
-export default CartProductCard;
 
 const styles = StyleSheet.create({
   productCardMainContainer: {
@@ -114,6 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: normalize(10),
     marginBottom: normalize(15),
     alignItems: 'center',
+    backgroundColor: '#f8f9f7',
   },
   productCardImageContainer: {
     height: normalize(80),
@@ -134,12 +128,13 @@ const styles = StyleSheet.create({
     height: normalize(12),
     width: normalize(12),
     resizeMode: 'contain',
-    marginTop: normalize(6),
+    tintColor:COLORS.white
+    // marginTop: normalize(6),
   },
   productCardNameText: {
     fontFamily: Fonts.RobotoRegular,
-    fontSize: normalize(10),
-    color: Colors.blue.dark,
+    fontSize: normalize(12),
+    color: COLORS.dark,
   },
   productCardPriceText: {
     fontFamily: Fonts.RobotoRegular,
@@ -168,7 +163,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: normalize(80),
-    backgroundColor: '#F5F6F6',
+    backgroundColor:COLORS.primary,
     height: normalize(28),
     borderRadius: normalize(50),
     position: 'absolute',
@@ -185,15 +180,26 @@ const styles = StyleSheet.create({
   counterText: {
     fontSize: normalize(12),
     lineHeight: normalize(14),
-    color: Colors.black.dark,
+    color: COLORS.white,
     fontFamily: Fonts.AssistantSemiBold,
   },
   productCardReviewText: {
     fontSize: normalize(9),
     lineHeight: normalize(14),
-    color: Colors.blue.main,
+    color: COLORS.main,
     fontFamily: Fonts.MadeTommyMedium,
     textDecorationLine: 'underline',
     marginTop: normalize(6),
   },
+  deleteIcon:{
+    height:normalize(30),
+    width:normalize(30),
+    backgroundColor:COLORS.primary,
+    justifyContent:'center',
+    alignItems:'center',
+    borderRadius:normalize(50),
+    marginTop:normalize(5)
+  }
 });
+
+export default CartProductCard;

@@ -11,8 +11,11 @@ import {
 import StackNav from './src/navigation/StackNav';
 import SplashScreen from 'react-native-splash-screen';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import NoInternetModal from './src/components/custom/NoInternetModal';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 const App = () => {
+  const netInfo = useNetInfo();
   useEffect(() => {
     SplashScreen.hide();
 
