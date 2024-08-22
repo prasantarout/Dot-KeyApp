@@ -93,9 +93,9 @@ const FavoriteProducts = () => {
           keyExtractor={item => item.id.toString()}
         />
       ) : (
-        <View style={{justifyContent:'center',alignItems:'center',flex:1}}>
+        <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
           <Text style={styles.emptyText}>
-            No products added to wishlist yet.
+            Not yet products added to wishlist yet.
           </Text>
         </View>
       )}
