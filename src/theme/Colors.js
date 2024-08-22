@@ -10,6 +10,9 @@ export const COLORS = {
   textColor:'#919191',
   dark: '#212121',
   secondaryLight: '#FFFAF5',
-  lightPrimary:'#b3ba94'
+  lightPrimary:'#b3ba94',
+  light_theme_text: '#1C222C',
+  light_theme_highlight: '#F6F6F6',
+  white:'#fff'
   //Background
 };

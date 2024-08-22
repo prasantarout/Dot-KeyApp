@@ -5,17 +5,39 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
   View,
 } from 'react-native';
 import StackNav from './src/navigation/StackNav';
 import SplashScreen from 'react-native-splash-screen';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const App = () => {
   useEffect(() => {
     SplashScreen.hide();
+
+    if (Text.defaultProps) {
+      Text.defaultProps.allowFontScaling = false;
+    } else {
+      Text.defaultProps = {};
+      Text.defaultProps.allowFontScaling = false;
+    }
+
+    // Override Text scaling in input fields
+    if (TextInput.defaultProps) {
+      TextInput.defaultProps.allowFontScaling = false;
+    } else {
+      TextInput.defaultProps = {};
+      TextInput.defaultProps.allowFontScaling = false;
+    }
   }, []);
-  return <StackNav />;
+
+  return (
+    <GestureHandlerRootView style={{flex: 1}}>
+      <StackNav />
+      <NoInternetModal netInfo={netInfo} />
+    </GestureHandlerRootView>
+  );
 };
 
 export default App;
