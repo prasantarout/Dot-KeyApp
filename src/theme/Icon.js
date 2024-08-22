@@ -45,4 +45,5 @@ export const Icons = {
   locationSolid: require('../assets/icons/locationSolid.png'),
   whiteBackIcon: require('../assets/icons/whiteBackIcon.png'),
   menu:require('../assets/icons/menu.png'),
+  heartFill:require('../assets/icons/heartfill.png'),
 };

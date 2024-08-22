@@ -20,6 +20,9 @@ import connectionrequest from '../../utils/helpers/NetInfo';
 import {useDispatch, useSelector} from 'react-redux';
 import CategoryItem from '../../components/common/CategoryItem';
 import {getProductByCategoryRequest} from '../../redux/reducer/ProductReducer';
+import {toggleFavorite} from '../../redux/actions/favoriteActions';
+import showErrorAlert from '../../utils/helpers/Toast';
+import AppStatusBar from '../../components/global/StatusBar';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -28,7 +31,12 @@ const Home = () => {
   const categories =
     useSelector(state => state.CategoryReducer?.categoriesListRes) || [];
   const ProductReducer = useSelector(state => state.ProductReducer);
-  console.log(ProductReducer?.getProductByCategoryRes, '>>>>>>>????>>>>>res');
+  const Product =
+    useSelector(
+      state => state.ProductReducer?.getProductByCategoryRes?.products,
+    ) || [];
+  const favorites = useSelector(state => state.favoriteReducer.favorites);
+  // console.log(favorites,">>>>>>??>>>>sss")
 
   useEffect(() => {
     connectionrequest()
@@ -56,8 +64,31 @@ const Home = () => {
     }
   }, [selectedCategory]);
 
+  const handleToggleFavorite = product => {
+    console.log(product, 'product');
+    const isFavorite = favorites.some(favItem => favItem.id === product.id);
+    dispatch(toggleFavorite(product));
+    if (isFavorite) {
+      showErrorAlert(`${product.title} has been removed from your favorites.`);
+    } else {
+      showErrorAlert(`${product.title} has been added to your favorites.`);
+    }
+  };
+
+  const renderProductCard = ({item: product}) => {
+    const isFavorite = favorites.some(favItem => favItem.id === product.id);
+    return (
+      <ProductCard
+        product={product}
+        isFavorite={isFavorite}
+        onToggleFavorite={() => handleToggleFavorite(product)}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
+      <AppStatusBar />
       {/* Header */}
       <CustomHeader
         title="Logo"
@@ -67,9 +98,9 @@ const Home = () => {
         icons={Icons.userProfile}
       />
       {/* Search Bar */}
-      <ScrollView style={styles.scrollView} 
-      showsVerticalScrollIndicator={false}
-      >
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}>
         <View style={styles.searchContainer}>
           <TextInputBoxSearch />
         </View>
@@ -90,19 +121,12 @@ const Home = () => {
         {/* Product Grid */}
 
         <FlatList
-          data={ProductReducer?.getProductByCategoryRes?.products}
-          renderItem={product => (
-            <ProductCard
-              product={{
-                // ...product.item,
-                price: product.item.price,
-                image: product.item.thumbnail,
-                title:product.item.title,
-                description: product.item.description,
-              }}
-            
-            />
-          )}
+          data={
+            ProductReducer?.getProductByCategoryRes?.products?.length > 0
+              ? ProductReducer?.getProductByCategoryRes?.products
+              : []
+          }
+          renderItem={renderProductCard}
           keyExtractor={item => item.id.toString()}
           numColumns={2}
           contentContainerStyle={styles.productList}
@@ -136,8 +160,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // backgroundColor: '#fff',
     borderRadius: 8,
-    paddingVertical: 5,
-    marginTop: 10,
+    // paddingVertical: 5,
+    // marginTop: 10,
   },
   searchIcon: {
     marginRight: 10,

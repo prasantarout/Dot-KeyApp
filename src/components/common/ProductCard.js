@@ -14,19 +14,31 @@ import {COLORS} from '../../theme/Colors';
 
 const width = Dimensions.get('screen').width;
 
-const ProductCard = ({product, containerStyle, index}) => {
+const ProductCard = ({
+  product,
+  containerStyle,
+  index,
+  isFavorite,
+  onToggleFavorite,
+}) => {
+  // console.log(product, '?????>>>product');
   return (
     <View style={[styles.productCardMainContainer]} key={index}>
-      <TouchableOpacity style={styles.heartIcon}>
+      <TouchableOpacity style={styles.heartIcon} onPress={onToggleFavorite}>
         <Image
-          source={Icons.bottomtab_icon_inactive_search}
-          style={styles.heartIconImage}
+          source={
+            isFavorite ? Icons.heartFill : Icons.bottomtab_icon_inactive_search
+          }
+          style={[
+            styles.heartIconImage,
+            {tintColor: isFavorite ? COLORS.primary : COLORS.black},
+          ]}
         />
       </TouchableOpacity>
       <View>
         <View style={styles.productCardImageContainer}>
           <Image
-            source={{uri: product?.image}}
+            source={{uri: product?.thumbnail}}
             style={styles.productCardImageStyle}
           />
         </View>
@@ -35,14 +47,9 @@ const ProductCard = ({product, containerStyle, index}) => {
         {product?.title}
       </Text>
       <View style={styles.priceAndCartContainer}>
-        <Text style={styles.productCardPriceText}>
-          ₹{product?.price}
-        </Text>
+        <Text style={styles.productCardPriceText}>₹{product?.price}</Text>
         <TouchableOpacity style={styles.cartIcon}>
-          <Image
-            source={Icons.Cart}
-            style={styles.cartIconImage}
-          />
+          <Image source={Icons.Cart} style={styles.cartIconImage} />
         </TouchableOpacity>
       </View>
     </View>
@@ -70,7 +77,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   productCardImageStyle: {
-    height: width / 2 - normalize(40), // Adjust image size
+    height: width / 2 - normalize(45), // Adjust image size
     width: width / 2 - normalize(40),
     resizeMode: 'contain',
   },
@@ -86,11 +93,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowRadius: 8,
     elevation: 3,
+    zIndex: 10,
   },
   heartIconImage: {
     width: normalize(20),
     height: normalize(20),
-    tintColor: 'red',
+    tintColor: COLORS.primary,
   },
   productCardNameText: {
     marginTop: normalize(10),

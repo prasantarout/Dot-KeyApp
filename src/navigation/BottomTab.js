@@ -2,14 +2,14 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {Image, Platform, StyleSheet, View} from 'react-native';
 import normalize from '../utils/helpers/normalize';
-import { Icons } from '../theme/Icon';
+import {Icons} from '../theme/Icon';
 
 import Home from '../screens/home/Home';
 import Cart from '../screens/cart/Cart';
 import Checkout from '../screens/checkout/Checkout';
 import ProductDetails from '../screens/productDetails/ProductDetails';
 import FavoriteProducts from '../screens/favorite/FavoriteProducts';
-import { COLORS } from '../theme/Colors';
+import {COLORS} from '../theme/Colors';
 const Tab = createBottomTabNavigator();
 
 const TabIconList = [
@@ -20,14 +20,14 @@ const TabIconList = [
     inactiveIcon: Icons.bottomtab_icon_inactive_home,
   },
   {
-    name: 'Favorite',
-    component: FavoriteProducts,
+    name: 'AllProducts',
+    component: ProductDetails,
     activeIcon: Icons.bottomtab_icon_active_orders,
     inactiveIcon: Icons.bottomtab_icon_inactive_orders,
   },
   {
-    name: 'AllProducts',
-    component: ProductDetails,
+    name: 'Favorite',
+    component: FavoriteProducts,
     activeIcon: Icons.bottomtab_icon_active_search,
     inactiveIcon: Icons.bottomtab_icon_inactive_search,
   },
@@ -37,7 +37,6 @@ const TabIconList = [
     activeIcon: Icons.Cart,
     inactiveIcon: Icons.Cart,
   },
-
 ];
 
 function BottomTab() {
@@ -111,13 +110,13 @@ const styles = StyleSheet?.create({
     height: normalize(20),
     width: normalize(20),
     resizeMode: 'contain',
-    tintColor:COLORS.primary
+    tintColor: COLORS.primary,
   },
   inactiveIcon: {
     height: normalize(20),
     width: normalize(20),
     resizeMode: 'contain',
-    tintColor:COLORS.bgWhite
+    tintColor: COLORS.bgWhite,
   },
 });
 

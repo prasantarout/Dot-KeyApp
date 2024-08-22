@@ -1,14 +1,21 @@
 // src/components/CustomHeader.js
 
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
-import { Icons } from '../../theme/Icon';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {Icons} from '../../theme/Icon';
 import normalize from '../../utils/helpers/normalize';
-import { COLORS } from '../../theme/Colors';
+import {COLORS} from '../../theme/Colors';
 
-const CustomHeader = ({ title, onMenuPress, onProfilePress,menuIcon,icons }) => {
+const CustomHeader = ({
+  title,
+  onMenuPress,
+  onProfilePress,
+  menuIcon,
+  icons,
+  backgroundColor,
+}) => {
   return (
-    <View style={styles.header}>
+    <View style={[styles.header]}>
       <TouchableOpacity onPress={onMenuPress}>
         <Image source={menuIcon} style={styles.icon} />
       </TouchableOpacity>
@@ -27,9 +34,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
-    // backgroundColor: '#fff', 
-    paddingHorizontal:normalize(2),  
+    paddingVertical: normalize(40),
+    // backgroundColor: '#fff',
+    paddingHorizontal: normalize(2),
   },
   logo: {
     fontSize: 24,
@@ -40,11 +47,11 @@ const styles = StyleSheet.create({
     width: normalize(30),
     height: normalize(30),
     resizeMode: 'contain',
-    tintColor:COLORS.bgWhite
+    tintColor: COLORS.bgWhite,
   },
-  icons:{
+  icons: {
     width: normalize(30),
     height: normalize(30),
     resizeMode: 'contain',
-  }
+  },
 });

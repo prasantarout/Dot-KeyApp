@@ -4,6 +4,7 @@ import CategoryReducer from '../reducer/CategoryReducer';
 import ProductReducer from '../reducer/ProductReducer';
 import { logger } from 'redux-logger';
 import RootSaga from '../reduxSaga/RootSaga';
+import favoriteReducer from '../reducer/favoriteReducer';
 
 // Create the saga middleware
 let sagaMiddleware = createSagaMiddleware();
@@ -13,6 +14,7 @@ const store = configureStore({
   reducer: {
     CategoryReducer: CategoryReducer, // You can use shorter keys
     ProductReducer: ProductReducer,
+    favoriteReducer:favoriteReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }) // Disable thunk if using sagas
