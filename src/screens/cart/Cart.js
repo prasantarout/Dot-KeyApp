@@ -10,6 +10,7 @@ import {
 } from '../../redux/actions/cartActions';
 import CartPriceDetails from '../../components/common/CartPriceDetails';
 import BottomModal from '../../components/custom/CustomModal';
+import {CustomButtonSolid} from '../../components/custom/CustomButton';
 
 const Cart = () => {
   const cartItems = useSelector(state => state.cartReducer.cartItems);
@@ -121,6 +122,14 @@ const Cart = () => {
           <Text style={styles.emptyText}>Your cart is empty.</Text>
         </View>
       )}
+      <CustomButtonSolid
+        label="Proceed to Checkout"
+        onPress={() => {
+          navigation.navigate('Checkout');
+        }}
+        containerStyle={{marginTop: normalize(0)}}
+      />
+
       {/* Confirmation Modal */}
       <BottomModal
         modalVisible={modalVisible}
