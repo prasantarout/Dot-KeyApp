@@ -25,6 +25,7 @@ const CartProductCard = ({
   onIncrease,
   onDecrease,
   quantity,
+  isCheckout,
 }) => {
   const [count, setCount] = useState(1);
   const price = parseFloat(productPrice.replace('$', ''));
@@ -73,13 +74,16 @@ const CartProductCard = ({
           </Text>
         ) : null}
 
-        {showDelete ? (
-          <TouchableOpacity activeOpacity={0.5} onPress={onDelete} style={styles.deleteIcon}>
+        {!isCheckout && showDelete ? (
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={onDelete}
+            style={styles.deleteIcon}>
             <Image source={Icons.delete} style={styles.productCardDeleteIcon} />
           </TouchableOpacity>
         ) : null}
       </View>
-      {showCounter ? (
+      {!isCheckout && showCounter ? (
         <View style={styles.counterTextContainer}>
           <TouchableOpacity
             onPress={onDecrease}
@@ -128,7 +132,7 @@ const styles = StyleSheet.create({
     height: normalize(12),
     width: normalize(12),
     resizeMode: 'contain',
-    tintColor:COLORS.white
+    tintColor: COLORS.white,
     // marginTop: normalize(6),
   },
   productCardNameText: {
@@ -163,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: normalize(80),
-    backgroundColor:COLORS.primary,
+    backgroundColor: COLORS.primary,
     height: normalize(28),
     borderRadius: normalize(50),
     position: 'absolute',
@@ -186,20 +190,20 @@ const styles = StyleSheet.create({
   productCardReviewText: {
     fontSize: normalize(9),
     lineHeight: normalize(14),
-    color: COLORS.main,
+    color: COLORS.primary,
     fontFamily: Fonts.MadeTommyMedium,
     textDecorationLine: 'underline',
     marginTop: normalize(6),
   },
-  deleteIcon:{
-    height:normalize(30),
-    width:normalize(30),
-    backgroundColor:COLORS.primary,
-    justifyContent:'center',
-    alignItems:'center',
-    borderRadius:normalize(50),
-    marginTop:normalize(5)
-  }
+  deleteIcon: {
+    height: normalize(30),
+    width: normalize(30),
+    backgroundColor: COLORS.primary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: normalize(50),
+    marginTop: normalize(5),
+  },
 });
 
 export default CartProductCard;

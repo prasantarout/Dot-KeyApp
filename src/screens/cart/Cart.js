@@ -11,8 +11,9 @@ import {
 import CartPriceDetails from '../../components/common/CartPriceDetails';
 import BottomModal from '../../components/custom/CustomModal';
 import {CustomButtonSolid} from '../../components/custom/CustomButton';
+import normalize from '../../utils/helpers/normalize';
 
-const Cart = () => {
+const Cart = props => {
   const cartItems = useSelector(state => state.cartReducer.cartItems);
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
@@ -115,6 +116,7 @@ const Cart = () => {
             discountAmount={`₹${discountAmount.toFixed(2)}`}
             shippingAmount={`₹${shippingAmount.toFixed(2)}`}
             payableAmount={`₹${payableAmount.toFixed(2)}`}
+            // quantity={cartItems.length}
           />
         </ScrollView>
       ) : (
@@ -122,13 +124,21 @@ const Cart = () => {
           <Text style={styles.emptyText}>Your cart is empty.</Text>
         </View>
       )}
-      <CustomButtonSolid
-        label="Proceed to Checkout"
-        onPress={() => {
-          navigation.navigate('Checkout');
-        }}
-        containerStyle={{marginTop: normalize(0)}}
-      />
+      {cartItems.length > 0 && (
+        <CustomButtonSolid
+          label="Proceed to Checkout"
+          onPress={() => {
+            props?.navigation.navigate('Checkout',{
+              totalProduct:totalProduct,
+              totalAmount:totalAmount?.toFixed(2),
+              discountAmount:discountAmount?.toFixed(2),
+              shippingAmount:shippingAmount?.toFixed(2),
+              payableAmount:payableAmount?.toFixed(2),
+            });
+          }}
+          containerStyle={{marginTop: normalize(0)}}
+        />
+      )}
 
       {/* Confirmation Modal */}
       <BottomModal

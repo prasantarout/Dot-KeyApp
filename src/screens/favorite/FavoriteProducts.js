@@ -17,7 +17,8 @@ import CustomHeader from '../../components/custom/CustomHeader';
 import {Icons} from '../../theme/Icon';
 import normalize from '../../utils/helpers/normalize';
 import BottomModal from '../../components/custom/CustomModal';
-import { addToCart } from '../../redux/actions/cartActions';
+import {addToCart} from '../../redux/actions/cartActions';
+import showErrorAlert from '../../utils/helpers/Toast';
 
 const FavoriteProducts = () => {
   const dispatch = useDispatch();
@@ -45,9 +46,9 @@ const FavoriteProducts = () => {
 
   const handleAddToCart = product => {
     dispatch(addToCart(product));
-    // dispatch(toggleFavorite(product.id));
+    dispatch(toggleFavorite(product));
+    showErrorAlert(`${product.title} has been added to your cart.`);
   };
-
   const handleIncreaseQuantity = product => {
     const newQuantity = (product.quantity || 1) + 1;
     dispatch(updateQuantity(product.id, newQuantity));
@@ -129,7 +130,7 @@ const FavoriteProducts = () => {
         <FlatList
           data={favorites}
           renderItem={renderWishlistItem}
-          keyExtractor={item => item?.id ? item.id.toString() : 'default-key'}
+          keyExtractor={item => (item?.id ? item.id.toString() : 'default-key')}
         />
       )}
       <BottomModal

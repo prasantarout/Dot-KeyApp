@@ -13,13 +13,33 @@ const CustomHeader = ({
   menuIcon,
   icons,
   backgroundColor,
+  isCheckout,
+  isMenu,
+  isLogo,
+  logo,
 }) => {
   return (
     <View style={[styles.header]}>
       <TouchableOpacity onPress={onMenuPress}>
-        <Image source={menuIcon} style={styles.icon} />
+        {isCheckout && (
+          <TouchableOpacity onPress={onMenuPress}>
+            <Image source={menuIcon} style={styles.icon} />
+          </TouchableOpacity>
+        )}
+
+        {/* Show menu icon only on Home screen */}
+        {isMenu && !isCheckout && (
+          <TouchableOpacity onPress={onMenuPress}>
+            <Image source={menuIcon} style={styles.icon} />
+          </TouchableOpacity>
+        )}
       </TouchableOpacity>
-      <Text style={styles.logo}>{title}</Text>
+      {isLogo ? (
+        <Image source={{uri:logo}} style={styles.logo_img} />
+      ) : (
+        <Text style={styles.logo}>{title}</Text>
+      )}
+
       <TouchableOpacity onPress={onProfilePress}>
         <Image source={icons} style={styles.icons} />
       </TouchableOpacity>
@@ -36,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: normalize(10),
     // backgroundColor: '#fff',
-    paddingHorizontal: normalize(2),
+    paddingHorizontal: normalize(10),
   },
   logo: {
     fontSize: 24,
@@ -44,8 +64,8 @@ const styles = StyleSheet.create({
     color: COLORS.textColor,
   },
   icon: {
-    width: normalize(30),
-    height: normalize(30),
+    width: normalize(25),
+    height: normalize(25),
     resizeMode: 'contain',
     tintColor: COLORS.bgWhite,
   },
@@ -54,4 +74,10 @@ const styles = StyleSheet.create({
     height: normalize(30),
     resizeMode: 'contain',
   },
+  logo_img:{
+    width: normalize(100),
+    height: normalize(40),
+    resizeMode:'contain'
+    
+  }
 });

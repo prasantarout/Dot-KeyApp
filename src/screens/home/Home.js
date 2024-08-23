@@ -20,14 +20,17 @@ import {getCategoriesListRequest} from '../../redux/reducer/CategoryReducer';
 import connectionrequest from '../../utils/helpers/NetInfo';
 import {useDispatch, useSelector} from 'react-redux';
 import CategoryItem from '../../components/common/CategoryItem';
-import {getProductByCategoryRequest} from '../../redux/reducer/ProductReducer';
+import {
+  getProductByCategoryRequest,
+  getProductByIdRequest,
+} from '../../redux/reducer/ProductReducer';
 import {toggleFavorite} from '../../redux/actions/favoriteActions';
 import showErrorAlert from '../../utils/helpers/Toast';
 import AppStatusBar from '../../components/global/StatusBar';
 import Loader from '../../utils/helpers/Loader';
 import {addToCart} from '../../redux/actions/cartActions';
 
-const Home = () => {
+const Home = (props) => {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -101,6 +104,10 @@ const Home = () => {
     }
   };
 
+  const handleProductPress = product => {
+    dispatch(getProductByIdRequest(product.id));
+    props?.navigation.navigate('ProductDetails', {productId: product.id});
+  };
 
   const renderProductCard = ({item: product}) => {
     const isFavorite = favorites.some(favItem => favItem.id === product.id);
@@ -110,6 +117,7 @@ const Home = () => {
         isFavorite={isFavorite}
         onToggleFavorite={() => handleToggleFavorite(product)}
         handleAddToCart={() => handleAddToCart(product)}
+        onPress={() => handleProductPress(product)}
       />
     );
   };
@@ -128,11 +136,14 @@ const Home = () => {
       {/* <AppStatusBar /> */}
       {/* Header */}
       <CustomHeader
-        title="Logo"
+        // title="Logo"
         onMenuPress={() => console.log('Menu pressed')}
         onProfilePress={() => console.log('Profile pressed')}
         menuIcon={Icons.menu}
         icons={Icons.userProfile}
+        isMenu={true}
+        logo={'https://www.dotandkey.com/cdn/shop/files/Skype_Picture_2023_09_19T09_33_02_315Z_200x.png?v=1695116367'}
+        isLogo={true}
       />
       {/* Search Bar */}
       <ScrollView
@@ -156,7 +167,6 @@ const Home = () => {
           showsHorizontalScrollIndicator={false}
         />
         {/* Product Grid */}
-
         <FlatList
           data={
             ProductReducer?.getProductByCategoryRes?.products?.length > 0

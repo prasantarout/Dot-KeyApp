@@ -12,7 +12,7 @@ export default function StackNav() {
   const Screens = {
     BottomTab: BottomTab,
     ProductDetails,
-    Checkout,
+    // Checkout,
   };
 
   return (

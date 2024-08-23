@@ -5,6 +5,8 @@ import showErrorAlert from '../../utils/helpers/Toast';
 import {
   getProductByCategoryFailure,
   getProductByCategorySuccess,
+  getProductByIdFailure,
+  getProductByIdSuccess,
   getProductListFailure,
   getProductListSuccess,
 } from '../reducer/ProductReducer';
@@ -48,6 +50,27 @@ export function* getProductByCategorySaga(action) {
   }
 }
 
+export function* getProductByIdSaga(action) {
+  let header = {
+    Accept: 'application/json',
+    contenttype: 'application/json',
+  };
+  try {
+    let response = yield call(getApi, `/${action.payload}`, header);
+    // console.log(response,">>>>>>>?>>>>products")
+    if (response?.status == 200) {
+      yield put(getProductByIdSuccess(response?.data));
+    } else {
+      yield put(getProductByIdFailure(response?.data));
+      showErrorAlert(response?.data?.message);
+    }
+  } catch (error) {
+    yield put(getProductByIdFailure(error));
+    showErrorAlert(error?.response?.data?.message);
+  }
+}
+
+
 const watchFunction = [
   (function* () {
     yield takeLatest('Product/getProductListRequest', getProductSaga);
@@ -56,6 +79,12 @@ const watchFunction = [
     yield takeLatest(
       'Product/getProductByCategoryRequest',
       getProductByCategorySaga,
+    );
+  })(),
+  (function* () {
+    yield takeLatest(
+      'Product/getProductByIdRequest',
+      getProductByIdSaga,
     );
   })(),
 ];

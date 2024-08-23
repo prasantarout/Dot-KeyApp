@@ -10,7 +10,53 @@ import Checkout from '../screens/checkout/Checkout';
 import ProductDetails from '../screens/productDetails/ProductDetails';
 import FavoriteProducts from '../screens/favorite/FavoriteProducts';
 import {COLORS} from '../theme/Colors';
+import { createStackNavigator } from '@react-navigation/stack';
+import Payment from '../screens/payment/Payment';
 const Tab = createBottomTabNavigator();
+
+
+const CartStack = createStackNavigator();
+const HomeStack = createStackNavigator();
+
+const CartStackScreen = () => {
+  return (
+    <CartStack.Navigator>
+      <CartStack.Screen
+        name="Cart"
+        component={Cart}
+        options={{ headerShown: false }} 
+      />
+      <CartStack.Screen
+        name="Checkout"
+        component={Checkout}
+        options={{ headerShown: false }} 
+      />
+      <CartStack.Screen
+        name="Payment"
+        component={Payment}
+        options={{ headerShown: false }} 
+      />
+    </CartStack.Navigator>
+  );
+};
+
+const HomeStackScreen = () => {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }} 
+      />
+      {/* <HomeStack.Screen
+        name="ProductDetails"
+        component={ProductDetails}
+        options={{ headerShown: false }} 
+      /> */}
+
+    </HomeStack.Navigator>
+  );
+};
 
 const TabIconList = [
   {
@@ -20,7 +66,7 @@ const TabIconList = [
     inactiveIcon: Icons.bottomtab_icon_inactive_home,
   },
   {
-    name: 'AllProducts',
+    name: 'ProductDetails',
     component: ProductDetails,
     activeIcon: Icons.bottomtab_icon_active_orders,
     inactiveIcon: Icons.bottomtab_icon_inactive_orders,
@@ -33,7 +79,7 @@ const TabIconList = [
   },
   {
     name: 'Cart',
-    component: Cart,
+    component: CartStackScreen,
     activeIcon: Icons.Cart,
     inactiveIcon: Icons.Cart,
   },

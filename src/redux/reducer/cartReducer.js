@@ -1,4 +1,4 @@
-import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from '../actions/cartActions';
+import { ADD_TO_CART, CLEAR_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY } from '../actions/cartActions';
 
 const initialState = {
   cartItems: [],
@@ -41,6 +41,12 @@ const cartReducer = (state = initialState, action) => {
         cartItems: state.cartItems.map(item =>
           item.id === productId ? { ...item, quantity } : item
         ),
+      };
+    }
+    case CLEAR_CART: {
+      return {
+        ...state,
+        cartItems: [],
       };
     }
 

@@ -14,7 +14,7 @@ export const Icons = {
   //-------------Formatted Icon
   search_textbox_icon: require('../assets/icons/search_textbox_icon.png'),
   //-------------Other Icons
-  // GobackHeader: require('../assets/icons/GobackHeader.png'),
+  GobackHeader: require('../assets/icons/previous.png'),
   home: require('../assets/icons/home.png'),
   // selectedHome: require('../assets/icons/selectedHome.png'),
   search: require('../assets/icons/search.png'),
@@ -46,4 +46,7 @@ export const Icons = {
   whiteBackIcon: require('../assets/icons/whiteBackIcon.png'),
   menu:require('../assets/icons/menu.png'),
   heartFill:require('../assets/icons/heartfill.png'),
+  purchase:require('../assets/icons/purchase.png'),
+  users:require('../assets/icons/users.png'),
+  dot:require('../assets/icons/dot.jpg'),
 };

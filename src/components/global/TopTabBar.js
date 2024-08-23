@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     borderBottomWidth: normalize(3),
-    borderColor: Colors.blue.main,
+    borderColor: COLORS.primary,
   },
   activeTabText: {
     fontFamily: Fonts.RobotoRegular,
-    color: Colors.blue.main,
+    color: COLORS.primary,
     fontSize: normalize(12),
   },
   inactiveTabText: {

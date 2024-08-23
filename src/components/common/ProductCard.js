@@ -20,11 +20,12 @@ const ProductCard = ({
   index,
   isFavorite,
   onToggleFavorite,
-  handleAddToCart
+  handleAddToCart,
+  onPress
 }) => {
   // console.log(product, '?????>>>product');
   return (
-    <View style={[styles.productCardMainContainer]} key={index}>
+    <TouchableOpacity  style={[styles.productCardMainContainer]} key={index} activeOpacity={0.8} onPress={onPress}>
       <TouchableOpacity style={styles.heartIcon} onPress={onToggleFavorite}>
         <Image
           source={
@@ -53,7 +54,7 @@ const ProductCard = ({
           <Image source={Icons.Cart} style={styles.cartIconImage} />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

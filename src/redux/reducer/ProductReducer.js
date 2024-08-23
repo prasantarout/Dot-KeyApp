@@ -6,6 +6,7 @@ const initialState = {
   error: null,
   productListRes: [],
   getProductByCategoryRes: {},
+  getProdcutByIdRes: {},
 };
 
 const ProductSlice = createSlice({
@@ -38,6 +39,18 @@ const ProductSlice = createSlice({
       state.error = action.error;
       state.status = action.type;
     },
+
+    getProductByIdRequest(state, action) {
+      state.status = action.type;
+    },
+    getProductByIdSuccess(state, action) {
+      state.getProdcutByIdRes = action.payload;
+      state.status = action.type;
+    },
+    getProductByIdFailure(state, action) {
+      state.error = action.error;
+      state.status = action.type;
+    },
   },
 });
 export const {
@@ -48,6 +61,10 @@ export const {
   getProductByCategoryRequest,
   getProductByCategorySuccess,  
   getProductByCategoryFailure,
+
+  getProductByIdRequest,
+  getProductByIdSuccess,
+  getProductByIdFailure,
 } = ProductSlice.actions;
 
 export default ProductSlice.reducer;

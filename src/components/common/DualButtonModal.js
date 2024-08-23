@@ -1,8 +1,9 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import ReactNativeModal from 'react-native-modal';
-import normalize from '../../utils/normalize';
-import {Colors, Fonts} from '../../themes/Themes';
+import normalize from '../../utils/helpers/normalize';
+import { COLORS } from '../../theme/Colors';
+import { Fonts } from '../../theme/Fonts';
 import {CustomButtonOutline, CustomButtonSolid} from '../custom/CustomButton';
 
 const DualButtonModal = ({
@@ -69,18 +70,18 @@ const styles = StyleSheet.create({
     paddingBottom: normalize(30),
     borderTopRightRadius: normalize(40),
     borderTopLeftRadius: normalize(40),
-    backgroundColor: Colors.white.main,
+    backgroundColor: COLORS.main,
   },
   modalLabel: {
     alignSelf: 'center',
     textTransform: 'uppercase',
-    color: Colors.blue.dark,
+    color: COLORS.dark,
     fontSize: normalize(16),
     fontFamily: Fonts.MadeTommy,
   },
   modalSubLabel: {
     alignSelf: 'center',
-    color: Colors.grey.main,
+    color: COLORS.main,
     fontSize: normalize(11),
     fontFamily: Fonts.RobotoRegular,
     marginTop: normalize(4),

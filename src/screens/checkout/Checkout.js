@@ -1,53 +1,123 @@
-import React from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  BackHandler,
+  Alert,
+} from 'react-native';
 import normalize from '../../utils/helpers/normalize';
-import { COLORS } from '../../theme/Colors';
-import { Fonts } from '../../theme/Fonts';
-import { Icons } from '../../theme/Icon';
+import {COLORS} from '../../theme/Colors';
+import {Fonts} from '../../theme/Fonts';
+import {Icons} from '../../theme/Icon';
 import CartProductCard from '../../components/common/CartProductCard';
 import CartPriceDetails from '../../components/common/CartPriceDetails';
-import {DummyData_Cart_ProductList} from '../../dummyData';
 import {CustomButtonSolid} from '../../components/custom/CustomButton';
-import AddressCard from '../../components/common/ShippingDetailsAddress';
+import {useSelector} from 'react-redux';
+import CustomHeader from '../../components/custom/CustomHeader';
+// import AddressCard from '../../components/common/ShippingDetailsAddress';
 
+const Checkout = ({navigation, route}) => {
+  const cartItems = useSelector(state => state.cartReducer.cartItems);
+  const {
+    totalProduct,
+    totalAmount,
+    discountAmount,
+    shippingAmount,
+    payableAmount,
+  } = route.params || {};
 
-const Checkout = ({navigation}) => {
+  const handleBackButtonClick = () => {
+    Alert.alert(
+      'Confirm Exit',
+      'Are you sure you want to go back?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => null, // Do nothing
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => navigation.goBack(), // Go back if confirmed
+        },
+      ],
+      {cancelable: true},
+    );
+    return true;
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, []);
+
   return (
     <View>
-      {/* <AddressCard
-        name={'John doe'}
-        address={'207/105 B.T.Road Los Angeles, California, USA'}
-        pinCode={'7003665'}
-        number={'+91 888 555 4545'}
-      /> */}
-      <View style={styles.productListContainer}>
-        <Text style={styles.productListLabel}>Items</Text>
-        {DummyData_Cart_ProductList.map((product, index) => {
-          return (
-            <CartProductCard
-              {...product}
-              key={index}
-              showProductPrice
-              showCounter
-              showDelete
-            />
-          );
-        })}
-      </View>
-      <CartPriceDetails
-        totalProduct={DummyData_Cart_ProductList.length}
-        totalAmount={'$77.66'}
-        discountAmount={'$12.66'}
-        shippingAmount={'$8.66'}
-        payableAmount={'$73.66'}
+      <CustomHeader
+        title="Checkout"
+        onMenuPress={handleBackButtonClick}
+        onProfilePress={() => console.log('Profile pressed')}
+        menuIcon={Icons.GobackHeader}
+        isCheckout={true}
       />
-      <CustomButtonSolid
-        label="Proceed to Payment"
-        onPress={() => {
-          navigation.navigate('CartPayment');
-        }}
-        containerStyle={{marginTop: normalize(0)}}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.textOrder}>Order Summary</Text>
+        <View style={{marginTop: normalize(10)}}>
+          {cartItems?.length > 0 &&
+            cartItems.map((item, index) => {
+              return (
+                <CartProductCard
+                  productImage={{uri: item.thumbnail}}
+                  productName={item.title}
+                  productPrice={`$${item.price * item.quantity}`}
+                  showProductPrice={true}
+                  productActualPrice={
+                    item.discountPercentage
+                      ? `$${(
+                          item.price *
+                          (1 - item.discountPercentage / 100)
+                        ).toFixed(2)}`
+                      : ''
+                  }
+                  showActualPrice={!!item.discountPercentage}
+                  productOrderId={item.sku}
+                  showOrderId={true}
+                  showDelete={true}
+                  showCounter={true}
+                  isCheckout={true}
+                  // quantity={item.quantity}
+                  // onDelete={() => handleDelete(item.id)}
+                  // onIncrease={() => handleIncrease(item.id)}
+                  // onDecrease={() => handleDecrease(item.id)}
+                />
+              );
+            })}
+        </View>
+        {/* </View> */}
+        <CartPriceDetails
+          totalProduct={cartItems.length}
+          totalAmount={`₹${totalAmount}`}
+          // totalAmount={{totalAmount}}
+          discountAmount={`₹${discountAmount}`}
+          shippingAmount={`₹${shippingAmount}`}
+          payableAmount={`₹${payableAmount}`}
+        />
+        <CustomButtonSolid
+          label="Proceed to Payment"
+          onPress={() => {
+            navigation.navigate('Payment');
+          }}
+          containerStyle={{marginTop: normalize(0)}}
+        />
+      </ScrollView>
     </View>
   );
 };
@@ -94,7 +164,7 @@ const styles = StyleSheet.create({
   shippingPersonNameText: {
     fontFamily: Fonts.RobotoRegular,
     fontSize: normalize(12),
-    color: Colors.blue.dark,
+    color: COLORS.dark,
   },
   shippingPersonAddressText: {
     fontFamily: Fonts.RobotoRegular,
@@ -110,14 +180,14 @@ const styles = StyleSheet.create({
   },
   productListContainer: {
     padding: normalize(10),
-    borderWidth: normalize(1),
-    borderColor: '#F0F0F0',
+    // borderWidth: normalize(1),
+    // borderColor: 'red',
     borderRadius: normalize(10),
     marginVertical: normalize(15),
   },
   productListLabel: {
     fontSize: normalize(13),
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontFamily: Fonts.MadeTommyExtraBold,
     marginBottom: normalize(10),
   },
@@ -160,5 +230,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#F1F1F1',
     flexDirection: 'row',
+  },
+  scrollContainer: {
+    paddingHorizontal: normalize(15),
+    paddingTop: normalize(10),
+    paddingBottom: normalize(100),
+    flexGrow: 1,
+  },
+  textOrder: {
+    fontSize: normalize(14),
+    fontFamily: Fonts.RobotoRegular,
+    color: '#505050',
   },
 });

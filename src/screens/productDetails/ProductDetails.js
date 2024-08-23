@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  ScrollView,
   View,
 } from 'react-native';
 import normalize from '../../utils/helpers/normalize';
@@ -17,6 +18,9 @@ import ProductCard from '../../components/common/ProductCard';
 import {DummyData_ProductDetails} from '../../dummyData';
 import {CustomButtonSolid} from '../../components/custom/CustomButton';
 import TopTabBar from '../../components/global/TopTabBar';
+import {useSelector} from 'react-redux';
+import moment from 'moment';
+import CustomHeader from '../../components/custom/CustomHeader';
 
 const width = Dimensions.get('screen').width;
 
@@ -25,51 +29,69 @@ const tabList = ['About', 'Details', 'Reviews'];
 const ProductDetails = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('About');
   const [activeSize, setActiveSize] = useState('1 BOX');
-  const [counter, setCounter] = useState(1);
-  const [showReviewPopup, setShowReviewPopup] = useState(false);
-  const [review, setReview] = useState('');
+
+  const ProductReducer = useSelector(state => state.ProductReducer);
+  const product = ProductReducer?.getProdcutByIdRes;
+
+  console.log(product, '>>>>>>>>>?<<<<');
+
+
+
+  const isProductEmpty = product === null || product === undefined || (Object.keys(product).length === 0 && product.constructor === Object);
+
+  if (isProductEmpty) {
+    return (
+      <View style={styles.noProductContainer}>
+        <Text style={styles.noProductText}>No product found</Text>
+      </View>
+    );
+  }
 
   return (
     <>
-      <View style={styles.imageContainer}>
-        <Image source={Icons.product20} style={styles.imageStyle} />
-      </View>
-      <View style={styles.brandContainer}>
-        <Text style={styles.brandText}>Brand: </Text>
-        <Text style={styles.brandTextUnderline}>
-          {DummyData_ProductDetails?.brand}
-        </Text>
-      </View>
-      <View style={styles.productNameContainer}>
-        <Text style={styles.productNameText}>
-          {DummyData_ProductDetails?.name}
-        </Text>
-      </View>
-      <View style={styles.productPriceContainer}>
-        <Text style={styles.productPriceText}>
-          Price: {DummyData_ProductDetails?.price}
-        </Text>
-      </View>
-      <View style={styles.earnPointContainer}>
-        <Text style={styles.earnPointText}>
-          Earn{' '}
-          <Text style={styles.earnPointTextColored}>
-            {DummyData_ProductDetails?.earnPoint}
-          </Text>{' '}
-          points upon purchasing this product.
-        </Text>
-      </View>
-      <View style={styles.productSortDescContainer}>
-        <Text style={styles.shortDescText}>
-          {DummyData_ProductDetails?.shortDesc}
-        </Text>
-      </View>
-      <View style={styles.sizeTextContainer}>
-        <Text style={styles.sizeText}>Size</Text>
-      </View>
-      <View style={styles.sizeListContainer}>
-        {DummyData_ProductDetails?.packs?.map((item, index) => {
-          return (
+      <CustomHeader
+        title="Product Details"
+        onMenuPress={() => navigation?.goBack()}
+        onProfilePress={() => console.log('Profile pressed')}
+        menuIcon={Icons.GobackHeader}
+        icons={Icons.userProfile}
+        // isCheckout={true}
+      />
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.imageContainer}>
+          {product?.images?.length > 0 && (
+            <Image
+              source={{uri: product.images[0]}}
+              style={styles.imageStyle}
+            />
+          )}
+        </View>
+        <View style={styles.brandContainer}>
+          <Text style={styles.brandText}>Brand: </Text>
+          <Text style={styles.brandTextUnderline}>{product?.brand}</Text>
+        </View>
+        <View style={styles.productNameContainer}>
+          <Text style={styles.productNameText}>{product?.title}</Text>
+        </View>
+        <View style={styles.productPriceContainer}>
+          <Text style={styles.productPriceText}>
+            Price: ₹{product?.price?.toFixed(2)}
+          </Text>
+        </View>
+        <View style={styles.earnPointContainer}>
+          <Text style={styles.earnPointText}>
+            Earn <Text style={styles.earnPointTextColored}>0</Text> points upon
+            purchasing this product.
+          </Text>
+        </View>
+        <View style={styles.productSortDescContainer}>
+          <Text style={styles.shortDescText}>{product?.description}</Text>
+        </View>
+        <View style={styles.sizeTextContainer}>
+          <Text style={styles.sizeText}>Size</Text>
+        </View>
+        <View style={styles.sizeListContainer}>
+          {product?.tags?.map((item, index) => (
             <TouchableOpacity
               style={
                 item === activeSize
@@ -82,52 +104,43 @@ const ProductDetails = ({navigation}) => {
                 style={
                   item === activeSize
                     ? styles.sizeTypeTextActive
-                    : styles?.sizeTypeTextInactive
+                    : styles.sizeTypeTextInactive
                 }>
                 {item}
               </Text>
             </TouchableOpacity>
-          );
-        })}
-      </View>
-
-      <View style={styles.cartMainContainer}>
-        <View style={styles.counterTextContainer}>
-          <TouchableOpacity
-            onPress={() => setCounter(counter - 1)}
-            style={styles.counterTouchArea}>
-            <Text style={styles.counterText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.counterText}>{counter}</Text>
-          <TouchableOpacity
-            onPress={() => setCounter(counter + 1)}
-            style={styles.counterTouchArea}>
-            <Text style={styles.counterText}>+</Text>
-          </TouchableOpacity>
+          ))}
         </View>
-        <View style={styles.cartContainer}>
-          <Image source={Icons.shopping_cart} style={styles.cart} />
-        </View>
-      </View>
-      <CustomButtonSolid label="Buy It Now" onPress={() => {}} />
-      <TopTabBar
-        tabList={tabList}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        tabContainerStyle={{marginTop: normalize(20)}}
-      />
-      {activeTab === tabList[0] ? (
-        <AboutBody {...DummyData_ProductDetails?.about} />
-      ) : null}
-      {activeTab === tabList[1] ? (
-        <DeatilsBody {...DummyData_ProductDetails?.details} />
-      ) : null}
-      {activeTab === tabList[2] ? (
-        <ReviewsBody
-          {...DummyData_ProductDetails?.reviews}
-          onPressReviewButton={() => setShowReviewPopup(true)}
+        <TopTabBar
+          tabList={tabList}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          tabContainerStyle={{marginTop: normalize(20)}}
         />
-      ) : null}
+        {activeTab === tabList[0] ? (
+          <AboutBody title="About" desc={product?.description} />
+        ) : null}
+        {activeTab === tabList[1] ? (
+          <DeatilsBody
+            title="Details"
+            desc={`SKU: ${product?.sku}\nWeight: ${product?.weight}g\nWarranty: ${product?.warrantyInformation}`}
+            spec={[
+              {
+                label: 'Dimensions',
+                value: `${product?.dimensions.width}x${product?.dimensions.height}x${product?.dimensions.depth}`,
+              },
+            ]}
+          />
+        ) : null}
+        {activeTab === tabList[2] ? (
+          <ReviewsBody
+            title="Reviews"
+            desc={`Average Rating: ${product?.rating}`}
+            reviewList={product?.reviews}
+            onPressReviewButton={() => setShowReviewPopup(true)}
+          />
+        ) : null}
+      </ScrollView>
     </>
   );
 };
@@ -194,12 +207,12 @@ const ReviewsBody = ({
           </Text>
         </View>
         <View style={styles.tabBodyHeaderContainer}>
-          <CustomButtonSolid
+          {/* <CustomButtonSolid
             label="Write A Review"
             onPress={onPressReviewButton}
             containerStyle={styles.reviewButton}
             textStyle={{fontSize: normalize(10)}}
-          />
+          /> */}
         </View>
       </View>
 
@@ -210,21 +223,24 @@ const ReviewsBody = ({
   );
 };
 
-const ReviewCard = ({profileName, review, time, desc}) => {
+const ReviewCard = ({reviewerEmail, reviewerName, comment, date, rating}) => {
   return (
     <View style={styles.reviewCardContainer}>
       <View style={styles.reviewCardTopContainer}>
         <View style={styles.reviewCardImageContainer}>
-          <Image source={Icons.circleDp} style={styles.reviewCardImage} />
+          <Image source={Icons.users} style={styles.reviewCardImage} />
         </View>
         <View style={{marginLeft: normalize(10)}}>
-          <Text style={styles.reviewCardProfileNameText}>{profileName}</Text>
-          <Text style={styles.reviewCardTimeText}>{time}</Text>
+          <Text style={styles.reviewCardProfileNameText}>{reviewerName}</Text>
+          <Text style={styles.reviewCardProfileNameText}>{reviewerEmail}</Text>
+          <Text style={styles.reviewCardTimeText}>
+            {moment(date).format('DD-MM-YYYY')}
+          </Text>
         </View>
       </View>
-      <Text style={styles.reviewCardReviewText}>{review}</Text>
+      <Text style={styles.reviewCardReviewText}>{comment}</Text>
       <Text style={[styles.tabBodyDescText, {marginTop: normalize(6)}]}>
-        {desc}
+        Rating:{rating}
       </Text>
     </View>
   );
@@ -233,6 +249,175 @@ const ReviewCard = ({profileName, review, time, desc}) => {
 export default ProductDetails;
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    padding: normalize(15),
+    backgroundColor: 'white',
+  },
+  imageContainer: {
+    height: (width * 2) / 3,
+    width: '100%',
+    borderRadius: normalize(10),
+    borderWidth: normalize(1),
+    padding: normalize(10),
+    borderColor: 'rgb(236,236,237)',
+  },
+  imageStyle: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'contain',
+  },
+  brandContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: normalize(14),
+  },
+  brandText: {
+    fontFamily: Fonts.RobotoRegular,
+    color: COLORS.dark,
+    fontSize: normalize(10),
+  },
+  brandTextUnderline: {
+    fontFamily: Fonts.RobotoRegular,
+    color: COLORS.dark,
+    fontSize: normalize(10),
+    textDecorationLine: 'underline',
+  },
+  productNameContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: normalize(10),
+  },
+  productNameText: {
+    fontFamily: Fonts.RobotoBlack,
+    color: COLORS.dark,
+    fontSize: normalize(18),
+  },
+  productPriceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: normalize(10),
+  },
+  productPriceText: {
+    fontFamily: Fonts.RobotoBold,
+    color: COLORS.dark,
+    fontSize: normalize(14),
+  },
+  earnPointContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#d9d9ff',
+    paddingVertical: normalize(10),
+    marginTop: normalize(10),
+    borderRadius: normalize(10),
+  },
+  earnPointText: {
+    fontFamily: Fonts.RobotoRegular,
+    color: COLORS.dark,
+    fontSize: normalize(9),
+    textTransform: 'uppercase',
+  },
+  earnPointTextColored: {
+    color: COLORS.white,
+  },
+  productSortDescContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: normalize(10),
+  },
+  shortDescText: {
+    fontFamily: Fonts.RobotoRegular,
+    color: '#505050',
+    fontSize: normalize(12),
+    lineHeight: normalize(18),
+  },
+  sizeTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: normalize(20),
+  },
+  sizeText: {
+    fontFamily: Fonts.RobotoBlack,
+    color: COLORS.dark,
+    fontSize: normalize(10),
+  },
+  sizeListContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: normalize(10),
+  },
+  sizeTypeContainerInactive: {
+    height: normalize(40),
+    width: normalize(40),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: normalize(10),
+    borderRadius: normalize(7),
+    borderWidth: normalize(1),
+    borderColor: '#d3d3d3',
+  },
+  sizeTypeContainerActive: {
+    height: normalize(40),
+    width: normalize(40),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: normalize(10),
+    borderRadius: normalize(7),
+    borderWidth: normalize(1),
+    borderColor: COLORS.black,
+  },
+  sizeTypeTextActive: {
+    fontFamily: Fonts.RobotoBold,
+    color: COLORS.black,
+    fontSize: normalize(10),
+  },
+  sizeTypeTextInactive: {
+    fontFamily: Fonts.RobotoRegular,
+    color: '#c2c2c2',
+    fontSize: normalize(10),
+  },
+  cartMainContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: normalize(20),
+  },
+  counterTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: normalize(1),
+    borderColor: COLORS.black,
+    borderRadius: normalize(10),
+    height: normalize(35),
+    paddingHorizontal: normalize(10),
+  },
+  counterTouchArea: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: normalize(35),
+  },
+  counterText: {
+    fontFamily: Fonts.RobotoBold,
+    color: COLORS.dark,
+    fontSize: normalize(16),
+  },
+  cartContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cart: {
+    height: normalize(20),
+    width: normalize(20),
+  },
+
+  tabBodyHeaderText: {
+    fontSize: normalize(13),
+    color: COLORS.primary,
+    fontFamily: Fonts.RobotoBlack,
+  },
+
   line: {
     height: 1,
     backgroundColor: '#e6e6e6',
@@ -247,12 +432,12 @@ const styles = StyleSheet.create({
     paddingTop: normalize(15),
     paddingBottom: normalize(30),
   },
-  container: {
-    backgroundColor: 'white',
-    height: '100%',
-    width: '100%',
-    justifyContent: 'flex-end',
-  },
+  // container: {
+  //   backgroundColor: 'white',
+  //   height: '100%',
+  //   width: '100%',
+  //   justifyContent: 'flex-end',
+  // },
   subView: {
     backgroundColor: 'white',
     marginTop: Platform.OS === 'android' ? normalize(50) : normalize(200),
@@ -282,12 +467,12 @@ const styles = StyleSheet.create({
   },
   brandText: {
     fontFamily: Fonts.RobotoRegular,
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontSize: normalize(10),
   },
   brandTextUnderline: {
     fontFamily: Fonts.RobotoRegular,
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontSize: normalize(10),
     textDecorationLine: 'underline',
   },
@@ -298,7 +483,7 @@ const styles = StyleSheet.create({
   },
   productNameText: {
     fontFamily: Fonts.RobotoBlack,
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontSize: normalize(18),
   },
   productPriceContainer: {
@@ -308,7 +493,7 @@ const styles = StyleSheet.create({
   },
   productPriceText: {
     fontFamily: Fonts.RobotoBold,
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontSize: normalize(14),
   },
   earnPointContainer: {
@@ -322,12 +507,12 @@ const styles = StyleSheet.create({
   },
   earnPointText: {
     fontFamily: Fonts.RobotoRegular,
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontSize: normalize(9),
     textTransform: 'uppercase',
   },
   earnPointTextColored: {
-    color: Colors.blue.main,
+    color: COLORS.white,
   },
   productSortDescContainer: {
     flexDirection: 'row',
@@ -347,7 +532,7 @@ const styles = StyleSheet.create({
   },
   sizeText: {
     fontFamily: Fonts.RobotoBlack,
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontSize: normalize(10),
   },
   sizeListContainer: {
@@ -365,6 +550,16 @@ const styles = StyleSheet.create({
     borderWidth: normalize(1),
     borderColor: '#d3d3d3',
   },
+  noProductContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noProductText: {
+    fontSize: normalize(18),
+    color: COLORS.dark,
+    fontFamily: Fonts.RobotoRegular,
+  },
   sizeTypeContainerActive: {
     height: normalize(40),
     width: normalize(40),
@@ -373,11 +568,11 @@ const styles = StyleSheet.create({
     marginRight: normalize(10),
     borderRadius: normalize(7),
     borderWidth: normalize(1),
-    borderColor: Colors.black,
+    borderColor: COLORS.black,
   },
   sizeTypeTextActive: {
     fontFamily: Fonts.RobotoRegular,
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontSize: normalize(10),
   },
   sizeTypeTextInactive: {
@@ -404,14 +599,14 @@ const styles = StyleSheet.create({
   counterText: {
     fontSize: normalize(18),
     lineHeight: normalize(24),
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontFamily: Fonts.AssistantBold,
   },
   cart: {
     height: normalize(20),
     width: normalize(20),
     resizeMode: 'contain',
-    tintColor: Colors.blue.main,
+    tintColor: COLORS.main,
   },
   cartContainer: {
     height: normalize(50),
@@ -449,11 +644,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: normalize(3),
-    borderColor: Colors.blue.main,
+    borderColor: COLORS.main,
   },
   activeTabText: {
     fontFamily: Fonts.RobotoRegular,
-    color: Colors.blue.main,
+    color: COLORS.main,
     fontSize: normalize(12),
   },
   inactiveTabText: {
@@ -470,15 +665,15 @@ const styles = StyleSheet.create({
     height: normalize(32),
     marginTop: normalize(10),
   },
-  tabBodyHeaderText: {
-    fontSize: normalize(13),
-    color: Colors.black.dark,
-    fontFamily: Fonts.RobotoBlack,
-  },
+  // tabBodyHeaderText: {
+  //   fontSize: normalize(13),
+  //   color: COLORS.dark,
+  //   fontFamily: Fonts.RobotoBlack,
+  // },
   tabBodyDescText: {
     fontFamily: Fonts.RobotoRegular,
     color: '#505050',
-    fontSize: normalize(11),
+    fontSize: normalize(13),
     lineHeight: normalize(18),
   },
   tabBodyLabelValueContainer: {
@@ -519,7 +714,7 @@ const styles = StyleSheet.create({
   },
   reviewCardProfileNameText: {
     fontSize: normalize(11),
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontFamily: Fonts.RobotoBlack,
   },
   reviewCardTimeText: {
@@ -531,12 +726,12 @@ const styles = StyleSheet.create({
   reviewCardReviewText: {
     marginTop: normalize(16),
     fontSize: normalize(11),
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontFamily: Fonts.RobotoBlack,
   },
   relatedProductLabel: {
     fontSize: normalize(13),
-    color: Colors.black.dark,
+    color: COLORS.dark,
     fontFamily: Fonts.RobotoBlack,
     marginBottom: normalize(4),
   },
