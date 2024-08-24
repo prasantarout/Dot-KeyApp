@@ -91,7 +91,9 @@ Why it's used: Allows for better management of asynchronous actions like fetchin
 
 
 
-For Clone the project:git clone https://github.com/prasantarout/Dot-KeyApp.git
+Clone the Repository:
+To get started with the project, first clone the repository to your local machine using the following command:
 
+git clone https://github.com/prasantarout/Dot-KeyApp.git
 
 Note:-This project is made only for learning purpose and not for commercial use.
