@@ -35,70 +35,63 @@ Screenshots
 Libraries Used
 Here is a list of the libraries used in this project and their purposes:
 
-@react-native-community/netinfo:
--------------------------------------------------------
-Used to detect network status and manage connectivity issues.
-@react-navigation/bottom-tabs:
--------------------------------
-Provides a bottom tab navigation system.
-@react-navigation/native:
---------------------------
-Core library for navigation between screens.
-@react-navigation/stack:
------------------------
-Implements stack-based navigation.
-@react-native-async-storage/async-storage:
--------------------------------------------
-Used for storing and retrieving data locally on the device.
-@react-native-gesture-handler:
--------------------------------
-Provides gesture handling for touch events.
-@react-native-reanimated:
--------------------------
-Used for creating complex animations and interactions.
-@react-native-safe-area-context:
----------------------------------
-@react-navigation/bottom-tabs: 
------------------------------------------
-Provides a bottom tab navigation system.
-@react-navigation/native:
----------------------------------------
-Core library for navigation between screens.
-@react-navigation/stack:
----------------------------------------------------
-Implements stack-based navigation to switch between screens.
-@reduxjs/toolkit:
---------------------------------------------
- Simplifies Redux state management, making it easier to write maintainable code.
-axios:
------------------------------------
-Used for making HTTP requests to the backend.
-moment:
--------------------------------
-  Library used for date and time manipulation.
+1. @react-native-community/netinfo
+Purpose: Used to detect the network status of the device. It helps manage connectivity issues and alerts the user when the network is down or restored. This is crucial for handling online/offline functionality in the app.
+Why it's used: Ensures a seamless experience by tracking network changes and providing appropriate responses or alerts when users lose internet connectivity.
+2. @react-navigation/bottom-tabs
+Purpose: Provides a bottom tab navigation system, allowing users to easily switch between major sections of the app, such as home, wishlist, cart, and profile.
+Why it's used: Enhances the user experience by allowing fast and intuitive navigation across different app sections.
+3. @react-navigation/native
+Purpose: Core navigation library that enables smooth transitions between screens.
+Why it's used: It handles routing and deep linking and is the foundation of navigation in the app.
+4. @react-navigation/stack
+Purpose: Implements stack-based navigation, allowing users to navigate forward and backward between screens, preserving the history of navigation.
+Why it's used: It provides a familiar user experience where users can push and pop screens in a stack (like moving between product details and cart screens).
+5. @reduxjs/toolkit
+Purpose: Simplifies Redux state management by providing a standardized way to write Redux logic with less boilerplate.
+Why it's used: Makes state management easier and more maintainable, especially as the app scales and requires more complex state handling.
+6. axios
+Purpose: A promise-based HTTP client used to handle API requests for fetching and sending data.
+Why it's used: Simplifies the process of making API calls, handling requests, and managing responses and errors in the app.
+7. moment
+Purpose: Library for parsing, validating, manipulating, and displaying dates and times.
+Why it's used: Helps with formatting dates in various parts of the app, like order histories or timestamps on product reviews.
+8. react-native-fast-image
+Purpose: Optimizes image loading and caching for better performance.
+Why it's used: Ensures that product images and other visuals load quickly and efficiently, providing a smoother user experience.
+9. react-native-gesture-handler
+Purpose: Handles gesture-based interactions like swiping and scrolling.
+Why it's used: Improves the handling of touch interactions, making the app more responsive and fluid for users.
+10. react-native-modal
+Purpose: Provides modals for creating custom pop-ups, such as alerts or confirmation dialogs.
+Why it's used: Helps in creating interactive pop-ups for actions like confirming checkout or showing success messages.
+11. react-native-safe-area-context
+Purpose: Manages safe area boundaries for devices with notches or special screen layouts.
+Why it's used: Ensures that the app looks consistent across different devices without cutting off important content in unsafe areas.
+12. react-native-screens
+Purpose: Improves performance by optimizing screen rendering and memory usage.
+Why it's used: Helps reduce memory consumption, resulting in smoother transitions and better performance, especially when switching between multiple screens.
+13. react-native-simple-toast
+Purpose: Provides simple toast notifications for feedback to users, such as when a product is added to the cart.
+Why it's used: Offers a non-intrusive way to give instant feedback to users about their actions.
+14. react-native-splash-screen
+Purpose: Displays a splash screen while the app is loading.
+Why it's used: Improves user experience by showing a branded loading screen during the initial app launch.
+15. react-redux
+Purpose: Provides bindings to use Redux with React Native components.
+Why it's used: Allows for easier management of global state and seamless connection between Redux store and React Native UI components.
+16. redux-logger
+Purpose: Logs Redux actions to help with debugging.
+Why it's used: Provides a clear insight into Redux actions and state changes during development, aiding in debugging.
+17. redux-saga
+Purpose: Middleware for handling side effects in Redux, such as API requests and background tasks.
+Why it's used: Allows for better management of asynchronous actions like fetching products and handling checkout processes.
 
-react-native-fast-image:
-------------------------------------------
-Optimizes image loading for better performance.
-react-native-modal:
-------------------------------------
-Provides modals for pop-ups and custom dialogs.
-react-native-screens:
---------------------------------------------------------
-Improves performance by optimizing screen rendering.
-react-native-simple-toast:
------------------------------------
-Provides simple toast notifications.
-react-native-splash-screen:
-------------------------------------
- Displays a splash screen while the app is loading.
-react-redux:
------------------------------------------------------------
-Integrates Redux state management with React Native components.
-redux-logger:
---------------------------------------------------------------------
-Logs Redux actions for easier debugging.
-redux-saga:
---------------------------------------------------------------------
-Manages side effects like data fetching and integration with APIs.
  
+
+
+
+For Clone the project:git clone https://github.com/prasantarout/Dot-KeyApp.git
+
+
+Note:-This project is made only for learning purpose and not for commercial use.
