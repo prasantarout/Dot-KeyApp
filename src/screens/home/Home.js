@@ -30,11 +30,14 @@ import AppStatusBar from '../../components/global/StatusBar';
 import Loader from '../../utils/helpers/Loader';
 import {addToCart} from '../../redux/actions/cartActions';
 
-const Home = (props) => {
+const Home = props => {
   const [products, setProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [loadingCategories, setLoadingCategories] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(true);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const dispatch = useDispatch();
   const categories =
@@ -81,6 +84,17 @@ const Home = (props) => {
         });
     }
   }, [selectedCategory]);
+
+  useEffect(() => {
+    if (searchTerm === '') {
+      setFilteredProducts(Product);
+    } else {
+      const filtered = Product.filter(product =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      setFilteredProducts(filtered);
+    }
+  }, [searchTerm, Product]);
 
   const handleToggleFavorite = product => {
     console.log(product, 'product');
@@ -142,7 +156,9 @@ const Home = (props) => {
         menuIcon={Icons.menu}
         icons={Icons.userProfile}
         isMenu={true}
-        logo={'https://www.dotandkey.com/cdn/shop/files/Skype_Picture_2023_09_19T09_33_02_315Z_200x.png?v=1695116367'}
+        logo={
+          'https://www.dotandkey.com/cdn/shop/files/Skype_Picture_2023_09_19T09_33_02_315Z_200x.png?v=1695116367'
+        }
         isLogo={true}
       />
       {/* Search Bar */}
@@ -150,7 +166,11 @@ const Home = (props) => {
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}>
         <View style={styles.searchContainer}>
-          <TextInputBoxSearch />
+          <TextInputBoxSearch
+            value={searchTerm}
+            setValue={setSearchTerm}
+            // onChangeText={text => setSearchTerm(text)}
+          />
         </View>
         {/* Categories List */}
         <FlatList
@@ -167,18 +187,20 @@ const Home = (props) => {
           showsHorizontalScrollIndicator={false}
         />
         {/* Product Grid */}
-        <FlatList
-          data={
-            ProductReducer?.getProductByCategoryRes?.products?.length > 0
-              ? ProductReducer?.getProductByCategoryRes?.products
-              : []
-          }
-          renderItem={renderProductCard}
-          keyExtractor={item => item.id.toString()}
-          numColumns={2}
-          contentContainerStyle={styles.productList}
-          scrollEnabled={false}
-        />
+        {filteredProducts?.length > 0 ? (
+          <FlatList
+            data={filteredProducts}
+            renderItem={renderProductCard}
+            keyExtractor={item => item.id.toString()}
+            numColumns={2}
+            contentContainerStyle={styles.productList}
+            scrollEnabled={false}
+          />
+        ) : (
+          <View style={styles.notFound}>
+            <Text style={styles.notfoundText}>Product not found</Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
@@ -198,6 +220,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     backgroundColor: 'red',
+  },
+  notFound: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: normalize(170),
+  },
+  notfoundText: {
+    fontSize: normalize(20),
+    fontWeight: 'bold',
+    color: COLORS.lightPrimary,
   },
   logo: {
     fontSize: 24,

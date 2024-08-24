@@ -38,14 +38,14 @@ const style = StyleSheet.create({
   },
   boldText: {
     fontSize: normalize(17),
-    color: COLORS.black,
+    color: COLORS.primaryText,
     fontFamily: Fonts.AssistantSemiBold,
     textAlign: 'center',
     marginVertical: normalize(10),
   },
   thinText: {
     fontSize: normalize(15),
-    color: COLORS.secondaryText,
+    color: COLORS.lightPrimary,
     fontFamily: Fonts.AssistantMedium,
     marginTop: normalize(10),
     marginBottom: normalize(20),

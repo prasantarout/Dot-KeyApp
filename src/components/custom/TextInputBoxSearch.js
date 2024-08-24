@@ -9,7 +9,7 @@ const TextInputBoxSearch = ({
   containerStyle = {},
   textInputStyle = {},
   placeholderTextColor = '#A5A5A5', //#CECEDB //'#4F4F4F'
-  placeholder = 'Enter the value . . .',
+  placeholder = 'Search Products . . .',
   value = '',
   setValue = () => {},
   textType = 'text',
