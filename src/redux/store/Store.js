@@ -21,7 +21,8 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }) // Disable thunk if using sagas
       .concat(sagaMiddleware)
-      .concat(logger), // Add logger if needed
+      // .concat(logger),
+       // Add logger if needed
 });
 
 // Run the root saga

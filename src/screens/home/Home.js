@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -85,6 +85,8 @@ const Home = props => {
     }
   }, [selectedCategory]);
 
+  const memoizedProducts = useMemo(() => Product, [Product]);
+
   useEffect(() => {
     if (searchTerm === '') {
       setFilteredProducts(Product);
@@ -94,7 +96,8 @@ const Home = props => {
       );
       setFilteredProducts(filtered);
     }
-  }, [searchTerm, Product]);
+  }, [searchTerm,ProductReducer?.status]);
+
 
   const handleToggleFavorite = product => {
     console.log(product, 'product');

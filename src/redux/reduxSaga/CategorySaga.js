@@ -17,7 +17,7 @@ export function* getCategoryListSaga(action) {
   };
   try {
     let response = yield call(getApi, `categories`, header);
-    console.log(response, '>>>>>>>res');
+    // console.log(response, '>>>>>>>res');
     if (response?.status == 200) {
       yield put(getCategoriesListSuccess(response?.data));
     } else {
@@ -39,7 +39,7 @@ export function* getCategoriesBasedOnListSaga(action) {
   };
   try {
     let response = yield call(getApi, `categories`, header);
-    console.log(response, '>>>>>>>res');
+    // console.log(response, '>>>>>>>res');
     if (response?.status == 200) {
       yield put(getCategoriesByListSuccess(response?.data));
     } else {

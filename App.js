@@ -18,7 +18,6 @@ const App = () => {
   const netInfo = useNetInfo();
   useEffect(() => {
     SplashScreen.hide();
-
     if (Text.defaultProps) {
       Text.defaultProps.allowFontScaling = false;
     } else {
@@ -35,11 +34,14 @@ const App = () => {
     }
   }, []);
 
+  // console.log('netInfo', netInfo);
+
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <>
+    {/* <Text>hello</Text> */}
       <StackNav />
-      <NoInternetModal netInfo={netInfo} />
-    </GestureHandlerRootView>
+      {/* <NoInternetModal netInfo={netInfo} /> */}
+    </>
   );
 };
 

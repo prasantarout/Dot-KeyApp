@@ -40,23 +40,7 @@ const CartStackScreen = () => {
   );
 };
 
-const HomeStackScreen = () => {
-  return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen
-        name="Home"
-        component={Home}
-        options={{ headerShown: false }} 
-      />
-      {/* <HomeStack.Screen
-        name="ProductDetails"
-        component={ProductDetails}
-        options={{ headerShown: false }} 
-      /> */}
 
-    </HomeStack.Navigator>
-  );
-};
 
 const TabIconList = [
   {

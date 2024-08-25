@@ -11,7 +11,7 @@ const Stack = createStackNavigator();
 export default function StackNav() {
   const Screens = {
     BottomTab: BottomTab,
-    ProductDetails,
+    // ProductDetails,
     // Checkout,
   };
 
