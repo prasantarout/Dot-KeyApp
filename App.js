@@ -40,7 +40,7 @@ const App = () => {
     <>
     {/* <Text>hello</Text> */}
       <StackNav />
-      {/* <NoInternetModal netInfo={netInfo} /> */}
+      <NoInternetModal netInfo={netInfo} />
     </>
   );
 };
